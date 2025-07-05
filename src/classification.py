@@ -17,11 +17,11 @@ def load_processed(filepath):
 def label_and_onehot_processing(df):
     label_features = ['Has Website', 'Social Media Presence', 'Marketplace Usage',
                       'Payment Digital Adoption', 'POS (Point of Sales) Usage',
-                      'Online Ads Usage', 'E-Wallet Acceptance', 'Location Type']
+                      'Online Ads Usage', 'E-Wallet Acceptance']
 
     onehot_features = ['Title', 'Active Social Media Channels', 'Social Media Posting Frequency',
                        'Year Started Digital Adoption', 'Business Size', 'Monthly Revenue',
-                       'Number of Employees']
+                       'Number of Employees', 'Location Type']
 
     target = 'Willingness to Develop'
 
@@ -131,6 +131,7 @@ def plot_feature_importance(df, target_column='Willingness to Develop'):
 
     for i in indices:
         print(f"{feature_names[i]}: {importances[i]:.4f}")
+
 
 def extract_decision_rules(tree, feature_names, target_names):
     tree_ = tree.tree_

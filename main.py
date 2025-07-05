@@ -6,7 +6,7 @@ from src.classification import (load_processed, label_and_onehot_processing, spl
 from sklearn.tree import DecisionTreeClassifier
 
 def main():
-    df = load_clear_data('datasets/business_owner_dataset_natural.csv')
+    df = load_clear_data('datasets/business_owner_dataset.csv')
     save_processed(df)
 
     df_processed = load_processed('datasets/processed_data.csv')
@@ -30,7 +30,7 @@ def main():
     print("\nRandom Forest Model")
     train_random_forest(X_train, X_test, y_train, y_test, n_estimators=150, max_depth=10, min_samples_split=10, min_samples_leaf=5)
 
-    print("\nCross Validation ID3")
+    print("\nCross Validation Decision Tree")
     cross_validate_decision_tree(X_encoded, y, max_depth=6, min_samples_split=20, min_samples_leaf=5, cv=5)
 
     print("\nCross Validation Random Forest")
@@ -41,6 +41,7 @@ def main():
     clf.fit(X_encoded, y)
 
     extract_decision_rules(clf, feature_names, ['Tidak Bersedia', 'Bersedia'])
+
 
 if __name__ == "__main__":
     main()
