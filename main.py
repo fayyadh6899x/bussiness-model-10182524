@@ -1,5 +1,9 @@
 from data.data_preprocessing import load_clear_data, save_processed
-from src.classification import load_processed, label_processing, split_data, train_and_evaluate, save_model_processed, check_label_distribution, train_random_forest
+from src.classification import (load_processed, label_and_onehot_processing, split_data,
+                                train_and_evaluate, train_random_forest, 
+                                cross_validate_decision_tree, cross_validate_random_forest,
+                                extract_decision_rules, check_label_distribution, plot_feature_importance)
+from sklearn.tree import DecisionTreeClassifier
 
 def main():
     df = load_clear_data('datasets/business_owner_dataset_natural.csv')
@@ -7,20 +11,37 @@ def main():
 
     df_processed = load_processed('datasets/processed_data.csv')
 
-    df_encoded = label_processing(df_processed) 
-    save_model_processed(df_encoded) 
+    X_encoded, y, feature_names, real_label = label_and_onehot_processing(df_processed)
 
-    X_train,X_test, y_train, y_test = split_data(df_encoded, 'Willingness to Develop')
+    processed_df = X_encoded.copy()
+    processed_df['Willingness to Develop'] = y
+    processed_df.to_csv('datasets/processed_model_data.csv', index=False)
 
-    check_label_distribution(df_encoded, 'Willingness to Develop')
+    X_train, X_test, y_train, y_test = split_data(X_encoded, y)
 
+    check_label_distribution(df_processed, 'Willingness to Develop')
+
+    print("\nThe Most Importance Features")
+    plot_feature_importance(processed_df)
+
+    print("\nDecision Tree Model")
     train_and_evaluate(X_train, X_test, y_train, y_test, max_depth=6, min_samples_split=20, min_samples_leaf=5)
-    train_and_evaluate(X_train, X_test, y_train, y_test, max_depth=7, min_samples_split=20, min_samples_leaf=10)
-    train_and_evaluate(X_train, X_test, y_train, y_test, max_depth=8, min_samples_split=30, min_samples_leaf=10)
 
-    train_random_forest(X_train, X_test, y_train, y_test, n_estimators=200, max_depth=15, min_samples_split=5, min_samples_leaf=3)
+    print("\nRandom Forest Model")
     train_random_forest(X_train, X_test, y_train, y_test, n_estimators=150, max_depth=10, min_samples_split=10, min_samples_leaf=5)
 
+    print("\nCross Validation ID3")
+    cross_validate_decision_tree(X_encoded, y, max_depth=6, min_samples_split=20, min_samples_leaf=5, cv=5)
+
+    print("\nCross Validation Random Forest")
+    cross_validate_random_forest(X_encoded, y, n_estimators=150, max_depth=10, min_samples_split=10, min_samples_leaf=5, cv=5)
+
+    print("\nExtract Decision Rules")
+    clf = DecisionTreeClassifier(criterion='entropy', max_depth=6, min_samples_split=20, min_samples_leaf=5, random_state=42)
+    clf.fit(X_encoded, y)
+
+    extract_decision_rules(clf, feature_names, ['Tidak Bersedia', 'Bersedia'])
 
 if __name__ == "__main__":
     main()
+

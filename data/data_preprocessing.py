@@ -2,7 +2,6 @@ import os
 import matplotlib.pyplot as plt
 import pandas as pd
 
-
 def load_clear_data(filepath):
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     full_path = os.path.join(base_dir, filepath)
@@ -11,7 +10,8 @@ def load_clear_data(filepath):
 
     df = df.drop(columns=[
         'Account Number', 'Legal Name', 'Owner First Name', 'Owner Middle Initial',
-        'Owner Last Name', 'Suffix', 'Legal Entity Owner', 'Formalization Status'
+        'Owner Last Name', 'Suffix', 'Legal Entity Owner', 'Formalization Status',
+
     ])
 
     return df
