@@ -10,6 +10,14 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 from src.arima import run_arima_per_store
 from src.preprocessing.normalize_output import normalize_outputs
+from src.generative.predict_text import (
+    load_json as load_json_bert,
+    build_prompt,
+    generate_narrative,
+    process_comprehensive_narrative 
+)
+import os
+
 
 def main():
     # Load dan simpan data hasil pembersihan
@@ -73,14 +81,72 @@ def main():
         model_name="random_forest"
     )
     
+    #Model ARIMA untuk prediksi trend penjualan dan prediksi penjualan
     print("\nMenjalankan ARIMA untuk Store 1")
-    run_arima_per_store(store_id=1)
+    run_arima_per_store(store_id=10)
     
     # Normalize output untuk dua model
     normalize_outputs(
         arima_path="outputs/predictions/arima_output.json",
         clf_path="outputs/predictions/classification_output.json"
     )
+        
+    # #Model T5
+    # print("\n  Menghasilkan narasi otomatis dengan model T5...")
+
+    # data_bert = load_json_bert("outputs/final/normalized_output.json")
+    # prompt = build_prompt(data_bert)
+    # result = generate_narrative(prompt)
+
+    # with open("outputs/final/generated_text_bert.txt", "w") as f:
+    #     f.write(result)
+
+    # print("\n Narasi otomatis (BERT-style):")
+    # print(result)
+
+    print("\nPREDIKSI RAJA HITAM CORP. KERUGIAN KORUPSI DAN PERDAGANGAN ANAK")
+
+    try:
+        data_bert = load_json_bert("outputs/final/normalized_output.json")
+        
+        if data_bert:
+            print(f"Data berhasil dimuat untuk toko: {data_bert.get('store', 'N/A')}")
+            print(f"Tren penjualan: {data_bert.get('trend', 'tidak diketahui')}")
+            print(f"Prediksi kategori: {data_bert.get('prediction', 'tidak diketahui')}")
+
+            result = process_comprehensive_narrative(data_bert)
+            
+            os.makedirs("outputs/final", exist_ok=True)
+            with open("outputs/final/generated_text_bert.txt", "w", encoding='utf-8') as f:
+                f.write(result)
+            
+            print("\nNarasi berhasil dihasilkan dan disimpan!")
+            print("="*60)
+            print("NARASI OTOMATIS YANG DIHASILKAN:")
+            print("="*60)
+            print(result)
+            print("="*60)
+            
+        else:
+            print("Error: Gagal memuat data dari file JSON.")
+            
+    except Exception as e:
+        print(f"Error dalam proses generasi narasi: {str(e)}")
+        
+        print("Mencoba dengan method fallback...")
+        try:
+            data_bert = load_json_bert("outputs/final/normalized_output.json")
+            prompt = build_prompt(data_bert)
+            result = generate_narrative(prompt)
+            
+            with open("outputs/final/generated_text_bert.txt", "w", encoding='utf-8') as f:
+                f.write(result)
+            
+            print("\nNarasi fallback berhasil dihasilkan:")
+            print(result)
+            
+        except Exception as e2:
+            print(f"Error fallback: {str(e2)}")
 
 if __name__ == "__main__":
     main()

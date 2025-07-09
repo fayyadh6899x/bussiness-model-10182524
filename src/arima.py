@@ -49,3 +49,4 @@ def run_arima_per_store(store_id=1, forecast_steps=3, train_path='datasets/Arima
 
     print(f"Output ARIMA Store {store_id} disimpan di {output_path}")
     return output
+

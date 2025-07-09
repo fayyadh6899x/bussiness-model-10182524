@@ -1,10 +1,10 @@
 {
-  "store": 1,
+  "store": 10,
   "trend": "turun",
   "forecast": [
-    5102.459678308156,
-    4992.6610937838705,
-    4917.566382147017
+    6351.9906702572,
+    6073.555822393307,
+    5980.488480003604
   ],
   "forecast_dates": [
     "2015-08-01",
@@ -12,5 +12,5 @@
     "2015-08-03"
   ],
   "prediction": "Bersedia",
-  "text": "Toko 1 diprediksi akan mengalami tren penjualan *turun* selama 3 hari ke depan, dengan estimasi:\n- 01 August 2015: Rp 5.102\n- 02 August 2015: Rp 4.992\n- 03 August 2015: Rp 4.917\n\nModel klasifikasi memprediksi bahwa pemilik bisnis termasuk dalam kategori *Bersedia*, berdasarkan data fitur yang telah dianalisis."
+  "text": "Toko 10 diprediksi akan mengalami tren penjualan *turun* selama 3 hari ke depan, dengan estimasi:\n- 01 August 2015: Rp 6.351\n- 02 August 2015: Rp 6.073\n- 03 August 2015: Rp 5.980\n\nModel klasifikasi memprediksi bahwa pemilik bisnis termasuk dalam kategori *Bersedia*, berdasarkan data fitur yang telah dianalisis."
 }
