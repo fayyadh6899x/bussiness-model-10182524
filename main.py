@@ -8,6 +8,8 @@ from src.classification import (
 )
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
+from src.arima import run_arima_per_store
+from src.preprocessing.normalize_output import normalize_outputs
 
 def main():
     # Load dan simpan data hasil pembersihan
@@ -69,6 +71,15 @@ def main():
         feature_names=feature_names,
         label_map=real_label,
         model_name="random_forest"
+    )
+    
+    print("\nMenjalankan ARIMA untuk Store 1")
+    run_arima_per_store(store_id=1)
+    
+    # Normalize output untuk dua model
+    normalize_outputs(
+        arima_path="outputs/predictions/arima_output.json",
+        clf_path="outputs/predictions/classification_output.json"
     )
 
 if __name__ == "__main__":
