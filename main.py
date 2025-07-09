@@ -51,6 +51,8 @@ def main():
 
     # Training Random Forest
     print("\nRandom Forest Model")
+    train_random_forest(X_train, X_test, y_train, y_test, n_estimators=150, max_depth=10, min_samples_split=10, min_samples_leaf=5)
+    
     rf_model = RandomForestClassifier(
         n_estimators=150, max_depth=10,
         min_samples_split=10, min_samples_leaf=5,

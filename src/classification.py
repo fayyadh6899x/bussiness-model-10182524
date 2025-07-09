@@ -190,5 +190,5 @@ def predict_and_export(model, X_test, y_test, feature_names, label_map, model_na
     with open(output_path, "w") as f:
         json.dump(output, f, indent=2)
 
-    print(f"[✔] Hasil prediksi disimpan di {output_path}")
+    print(f"Hasil prediksi disimpan di {output_path}")
     return output
