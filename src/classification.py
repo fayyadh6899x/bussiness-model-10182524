@@ -8,6 +8,7 @@ from sklearn.model_selection import cross_val_score
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.tree import _tree
+import json
 from sklearn.compose import ColumnTransformer
 
 def load_processed(filepath):
@@ -164,3 +165,30 @@ def extract_decision_rules(tree, feature_names, target_names):
         rule_text = " DAN ".join(path)
         print(f"Jika {rule_text} → Disarankan: {prediction}")
 
+def predict_and_export(model, X_test, y_test, feature_names, label_map, model_name="random_forest", output_path="outputs/predictions/classification_output.json"):
+    y_pred = model.predict(X_test)
+    accuracy = accuracy_score(y_test, y_pred)
+
+    if hasattr(model, 'feature_importances_'):
+        importances = model.feature_importances_
+        top_indices = importances.argsort()[::-1][:5]
+        top_features = [feature_names[i] for i in top_indices]
+    else:
+        top_features = feature_names  
+
+    first_pred_idx = 0
+    pred_label = label_map['Willingness to Develop'][y_pred[first_pred_idx]]
+
+    output = {
+        "model": model_name,
+        "target": "Willingness to Develop",
+        "prediksi": pred_label,
+        "top_features": top_features,
+        "accuracy": round(accuracy, 4)
+    }
+
+    with open(output_path, "w") as f:
+        json.dump(output, f, indent=2)
+
+    print(f"[✔] Hasil prediksi disimpan di {output_path}")
+    return output

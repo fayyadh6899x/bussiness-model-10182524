@@ -1,0 +1,13 @@
+{
+  "model": "random_forest",
+  "target": "Willingness to Develop",
+  "prediksi": "Bersedia",
+  "top_features": [
+    "E-Wallet Acceptance",
+    "Has Website",
+    "Payment Digital Adoption",
+    "Marketplace Usage",
+    "Business Size_Small"
+  ],
+  "accuracy": 0.5787
+}
